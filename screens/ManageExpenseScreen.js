@@ -12,6 +12,10 @@ const ManageExpenseScreen = ({ route, navigation }) => {
 
   const expensesCtx = useContext(ExpensesContext);
 
+  const selectedExpense = expensesCtx.expenses.find(
+    (expense) => expense.id === expenseId
+  );
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? 'Edit Expense' : 'Add Expense',
@@ -42,6 +46,7 @@ const ManageExpenseScreen = ({ route, navigation }) => {
         onCancel={cancelExpenseHandler}
         onSubmit={saveExpenseHandler}
         submitButtonText={isEditing ? 'Update' : 'Add'}
+        defaultValues={selectedExpense}
       />
       {isEditing && (
         <View style={styles.deleteContainer}>

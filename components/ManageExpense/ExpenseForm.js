@@ -3,11 +3,22 @@ import { StyleSheet, Text, View } from 'react-native';
 import Button from '../UI/Button';
 import Input from './Input';
 
-const ExpenseForm = ({ onCancel, onSubmit, submitButtonText }) => {
+const ExpenseForm = ({
+  onCancel,
+  onSubmit,
+  submitButtonText,
+  defaultValues,
+}) => {
   const [inputValues, setInputValues] = useState({
-    amount: '',
-    date: '',
-    description: '',
+    amount: defaultValues?.amount?.toString() || '',
+    date:
+      defaultValues?.date
+        ?.toISOString()
+        .split('T')[0]
+        .split('-')
+        .reverse()
+        .join('-') || '',
+    description: defaultValues?.description || '',
   });
 
   const InputHandler = (inputIdentifier, enteredText) => {
@@ -20,13 +31,12 @@ const ExpenseForm = ({ onCancel, onSubmit, submitButtonText }) => {
   };
 
   const submitHandler = () => {
-    // change date format from DD-MM-YYYY to DD/MM/YYYY
-    const date = inputValues.date.split('-').join('/');
-
+    // convert date type DD-MM-YYYY to new Date()
+    const dateParts = inputValues.date.split('-');
     const expenseData = {
-      amount: +inputValues.amount,
-      date: new Date(date),
+      amount: parseFloat(inputValues.amount),
       description: inputValues.description,
+      date: new Date(dateParts[2], dateParts[1] - 1, dateParts[0]),
     };
     onSubmit(expenseData);
   };
