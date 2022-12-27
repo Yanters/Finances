@@ -4,8 +4,10 @@ import axios from 'axios';
 const FIREBASE_URL =
   'https://react-native-b6ece-default-rtdb.europe-west1.firebasedatabase.app';
 
-export const storeExpense = (expense) => {
-  axios.post(`${FIREBASE_URL}/expenses.json`, expense);
+export const storeExpense = async (expense) => {
+  const response = await axios.post(`${FIREBASE_URL}/expenses.json`, expense);
+  const id = response.data.name;
+  return id;
 };
 
 export const fetchExpenses = async () => {
@@ -20,4 +22,12 @@ export const fetchExpenses = async () => {
     });
   }
   return expenses;
+};
+
+export const updateExpense =  (id, expense) => {
+  return axios.put(`${FIREBASE_URL}/expenses/${id}.json`, expense);
+};
+
+export const deleteExpense =  (id) => {
+  return axios.delete(`${FIREBASE_URL}/expenses/${id}.json`);
 };
